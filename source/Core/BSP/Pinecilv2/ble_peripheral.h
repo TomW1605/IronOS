@@ -27,6 +27,7 @@ extern "C" {
 void                 ble_tp_init();
 void                 bt_enable_cb(int err);
 struct bt_gatt_attr *get_attr(u8_t index);
+struct bt_conn      *get_conn();
 
 #ifdef __cplusplus
 };

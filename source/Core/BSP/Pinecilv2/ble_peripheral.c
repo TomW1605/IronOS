@@ -35,6 +35,7 @@ static void          ble_device_connected(struct bt_conn *conn, u8_t err);
 static void          ble_device_disconnected(struct bt_conn *conn, u8_t reason);
 static void          ble_connection_param_changed(struct bt_conn *conn, u16_t interval, u16_t latency, u16_t timeout);
 struct bt_gatt_attr *get_attr(u8_t index);
+struct bt_conn      *get_conn();
 
 static struct bt_conn                *ble_tp_conn;
 static struct bt_gatt_exchange_params exchg_mtu;
@@ -145,7 +146,7 @@ static void ble_tp_ind_ccc_changed(const struct bt_gatt_attr *attr, u16_t value)
 static struct bt_gatt_attr attrs[] = {
     BT_GATT_PRIMARY_SERVICE(BT_UUID_SVC_LIVE_DATA),
 
-    BT_GATT_CHARACTERISTIC(BT_UUID_CHAR_BLE_LIVE_LIVE_TEMP, BT_GATT_CHRC_READ, BT_GATT_PERM_READ, ble_char_read_status_callback, NULL, NULL),
+    BT_GATT_CHARACTERISTIC(BT_UUID_CHAR_BLE_LIVE_LIVE_TEMP, BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY, BT_GATT_PERM_READ, ble_char_read_status_callback, NULL, NULL),
     BT_GATT_CHARACTERISTIC(BT_UUID_CHAR_BLE_LIVE_SETPOINT_TEMP, BT_GATT_CHRC_READ, BT_GATT_PERM_READ, ble_char_read_status_callback, NULL, NULL),
     BT_GATT_CHARACTERISTIC(BT_UUID_CHAR_BLE_LIVE_DC_INPUT, BT_GATT_CHRC_READ, BT_GATT_PERM_READ, ble_char_read_status_callback, NULL, NULL),
     BT_GATT_CHARACTERISTIC(BT_UUID_CHAR_BLE_LIVE_HANDLE_TEMP, BT_GATT_CHRC_READ, BT_GATT_PERM_READ, ble_char_read_status_callback, NULL, NULL),
@@ -252,6 +253,14 @@ NAME
 */
 struct bt_gatt_attr *get_attr(u8_t index) {
   return &attrs[index];
+}
+
+/*************************************************************************
+NAME
+    get_conn
+*/
+struct bt_conn *get_conn() {
+  return &ble_tp_conn;
 }
 
 static struct bt_gatt_service ble_tp_server = BT_GATT_SERVICE(attrs);

@@ -15,6 +15,9 @@
 #include "power.hpp"
 #include "task.h"
 
+#include "gatt.h"
+#include "ble_peripheral.h"
+
 static TickType_t powerPulseWaitUnit      = 25 * TICKS_100MS;      // 2.5 s
 static TickType_t powerPulseDurationUnit  = (5 * TICKS_100MS) / 2; // 250 ms
 TaskHandle_t      pidTaskNotification     = NULL;
@@ -85,6 +88,8 @@ void startPIDTask(void const *argument __unused) {
 #ifdef DEBUG_UART_OUTPUT
     log_system_state(x10WattsOut);
 #endif
+    uint32_t currentTipTempInC = TipThermoModel::getTipInC(true);
+    bt_gatt_notify(get_conn(), get_attr(1), &currentTipTempInC, sizeof(currentTipTempInC));
   }
 }
 

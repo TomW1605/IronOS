@@ -142,6 +142,9 @@ int ble_char_read_bulk_value_callback(struct bt_conn *conn, const struct bt_gatt
   case 1:
     // Bulk data
     {
+//      uint32_t tipTemp = TipThermoModel::getTipInC();
+//      bt_gatt_notify(conn, get_attr(1), &tipTemp, sizeof(tipTemp));
+
       uint32_t bulkData[] = {
           TipThermoModel::getTipInC(),                                         // 0  - Current temp
           getSettingValue(SettingsOptions::SolderingTemp),                     // 1  - Setpoint
